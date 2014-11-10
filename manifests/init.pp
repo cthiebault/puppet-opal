@@ -1,7 +1,7 @@
 class opal {
 
-  package { 'wget':
-    ensure => 'installed',
+  class { 'java':
+    distribution => 'jre',
   }
 
   class { '::mysql::server':
