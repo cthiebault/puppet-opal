@@ -1,6 +1,6 @@
 class opal::mysql (
-  $mysql_user = 'opaluser',
-  $mysql_password = 'opalpass',
+  $mysql_user,
+  $mysql_password,
 ) {
 
   class { '::mysql::server':

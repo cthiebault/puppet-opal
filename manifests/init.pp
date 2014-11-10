@@ -9,6 +9,9 @@ class opal (
 
   include '::mongodb::server'
 
-  include 'opal::mysql'
+  class { 'opal::mysql':
+    mysql_user     => $mysql_user,
+    mysql_password => $mysql_password,
+  }
 
 }
