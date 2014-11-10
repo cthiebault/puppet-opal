@@ -5,7 +5,6 @@ class opal {
   }
 
   class { '::mysql::server':
-    root_password    => 'strongpassword',
     override_options => {
       'mysqld' => {
         'default-storage-engine' => 'INNODB',
