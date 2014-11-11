@@ -12,3 +12,6 @@ mod 'mysql',
 
 mod 'stdlib',
   :git => 'https://github.com/puppetlabs/puppetlabs-stdlib.git'
+
+mod 'wget',
+  :git => 'https://github.com/maestrodev/puppet-wget.git'
