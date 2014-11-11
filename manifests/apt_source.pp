@@ -25,9 +25,9 @@ class opal::apt_source (
   }
 
 # https://github.com/puppetlabs/puppetlabs-stdlib
-  file_line { "obiba-$repo_release-sources.list":
+  file_line { "obiba-${repo_release}-sources.list":
     path    => '/etc/apt/sources.list',
-    line    => "deb http://pkg.obiba.org $repo_release/",
+    line    => "deb http://pkg.obiba.org ${repo_release}/",
     notify  => Exec['apt_update']
   }
 

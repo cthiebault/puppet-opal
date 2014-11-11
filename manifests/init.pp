@@ -1,9 +1,11 @@
 class opal (
-  $stable = true,
-  $password = 'password',
-  $mysql_user = 'opaluser',
-  $mysql_password = 'opalpass',
-) {
+  $stable         = $opal::params::stable,
+  $password       = $opal::params::password,
+  $mysql_user     = $opal::params::mysql_user,
+  $mysql_password = $opal::params::mysql_password,
+) inherits opal::params {
+
+  include wget
 
 #  class { 'java':
 #    distribution => 'jre',
@@ -24,5 +26,9 @@ class opal (
   class { 'opal::server':
     password => $password,
   }
+
+  include 'opal::datashield'
+
+  include 'opal::data'
 
 }

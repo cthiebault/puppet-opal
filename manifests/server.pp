@@ -1,5 +1,5 @@
 class opal::server (
-  $password,
+  $password = $opal::params::password,
 ) {
 
 # TODO: manage password like puppet-mysql does
@@ -9,13 +9,13 @@ class opal::server (
   }
 
   exec { 'set-opal-password':
-    command => "/bin/echo opal opal-server/admin_password select $password | debconf-set-selections",
+    command => "/bin/echo opal opal-server/admin_password select ${password} | debconf-set-selections",
     path    => ['/bin', '/usr/bin'],
     require => Package['debconf-utils'],
   }
 
   exec { 'repeat-opal-password':
-    command => "/bin/echo opal opal-server/admin_password_again select $password | debconf-set-selections",
+    command => "/bin/echo opal opal-server/admin_password_again select ${password} | debconf-set-selections",
     path    => ['/bin', '/usr/bin'],
     require => [Package['debconf-utils'], Exec['set-opal-password']],
   }
