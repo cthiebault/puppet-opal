@@ -1,6 +1,9 @@
 mod 'apt',
   :git => 'https://github.com/puppetlabs/puppetlabs-apt.git'
 
+mod 'archive',
+  :git => 'https://github.com/gini/puppet-archive.git'
+
 mod 'java',
   :git => 'https://github.com/puppetlabs/puppetlabs-java.git'
 

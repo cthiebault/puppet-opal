@@ -1,26 +1,21 @@
-class opal::data (
+class opal::data {
+
+  opal::data::import { 'idsdb' : }
+  opal::data::import { 'sqldb' : }
+  opal::data::import { 'mongodb' : }
+
+}
+
+define opal::data::import (
   $password = $opal::params::password,
 ) {
 
-  $idsdb = template("${module_name}/idsdb.json.erb")
-  exec { 'import-ids-db':
+  $json = template("${module_name}/${name}.json.erb")
+  exec { "import-${name}-db":
     provider => shell,
-    command  => "opal rest -o http://localhost:8080 -u administrator -p ${password} -m POST /system/databases --content-type \"application/json\" < ${idsdb}",
-    require  => [Package['opal'], Package['opal-python-client']],
-  }
-
-  $sqldb = template("${module_name}/sqldb.json.erb")
-  exec { 'import-sql-db':
-    provider => shell,
-    command  => "opal rest -o http://localhost:8080 -u administrator -p ${password} -m POST /system/databases --content-type \"application/json\" < ${sqldb}",
-    require  => [Package['opal'], Package['opal-python-client']],
-  }
-
-  $mongodb = template("${module_name}/mongodb.json.erb")
-  exec { 'import-ids-db':
-    provider => shell,
-    command  => "opal rest -o http://localhost:8080 -u administrator -p ${password} -m POST /system/databases --content-type \"application/json\" < ${mongodb}",
+    command  => "opal rest -o http://localhost:8080 -u administrator -p ${password} -m POST /system/databases --content-type \"application/json\" < ${json}",
     require  => [Package['opal'], Package['opal-python-client']],
   }
 
 }
+

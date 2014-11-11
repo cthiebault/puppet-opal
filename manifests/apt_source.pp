@@ -18,10 +18,9 @@ class opal::apt_source (
 #    architecture => false,
 #  }
 
-  package { 'wget': }
-
   exec { 'wget -q -O - http://pkg.obiba.org/obiba.org.key | sudo apt-key add -':
-    path => ['/usr/bin', '/usr/sbin']
+    path => ['/usr/bin', '/usr/sbin'],
+    require  => Package['wget'],
   }
 
 # https://github.com/puppetlabs/puppetlabs-stdlib
