@@ -1,9 +1,9 @@
 class opal (
   $stable = true,
+  $password = 'password',
   $mysql_user = 'opaluser',
   $mysql_password = 'opalpass',
 ) {
-
 
 #  class { 'java':
 #    distribution => 'jre',
@@ -21,9 +21,8 @@ class opal (
     stable => $stable,
   }
 
-  package { 'opal' :
-    ensure  => 'latest',
-    require => Exec['apt_update'],
+  class { 'opal::server':
+    password => $password,
   }
 
 }
