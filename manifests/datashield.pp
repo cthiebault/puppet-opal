@@ -1,9 +1,26 @@
-class opal::datashield (
-  $rstudio_deb  = $opal::params::rstudio_deb,
-  $password     = $opal::params::datashield_password,
-) {
+class opal::datashield {
 
-  # TODO look for RStudio puppet module
+  package { 'opal-rserver' :
+    ensure  => 'latest',
+    require => Package['opal'],
+  }
+
+  include opal::datashield::rstudio
+
+  service { 'rserver' :
+    ensure  => 'running',
+    require => Package['opal-rserver'],
+  }
+
+  user { 'datashield':
+    ensure    => 'present',
+    password  => $opal::password,
+  }
+
+}
+
+# TODO look for RStudio puppet module
+class opal::datashield::rstudio {
 
   apt::source { 'rstudio':
     location   => 'http://cran.rstudio.com/bin/linux/ubuntu',
@@ -12,17 +29,8 @@ class opal::datashield (
     key_server => 'keyserver.ubuntu.com',
   }
 
-  package { 'opal-rserver' :
-    ensure  => 'latest',
-    require => Package['opal'],
-  }
+  $tmp_rstudio = "/tmp/${opal::rstudio_deb}"
 
-  service { 'rserver' :
-    ensure  => 'running',
-    require => Package['opal-rserver'],
-  }
-
-# R studio
   package { ['libapparmor1', 'gdebi-core', 'r-base']  :
     ensure  => 'latest',
   }
@@ -30,16 +38,16 @@ class opal::datashield (
   wget::fetch { 'rstudio-server-download':
     require     => Package['r-base'],
     timeout     => 0,
-    destination => "/tmp/${rstudio_deb}",
-    source      => "http://download2.rstudio.org/${rstudio_deb}",
+    destination => $tmp_rstudio,
+    source      => "http://download2.rstudio.org/${opal::rstudio_deb}",
   }
   ->
   exec { 'rstudio-server-install':
     provider => shell,
-    command  => "gdebi -n /tmp/${rstudio_deb}",
+    command  => "gdebi -n ${tmp_rstudio}",
   }
   ->
-  file { "/tmp/${rstudio_deb}":
+  file { $tmp_rstudio:
     ensure => absent
   }
   ->
@@ -49,11 +57,6 @@ class opal::datashield (
 #  ->
 #  exec {
 #    command => 'update-rc.d rstudio-server defaults',
+#    path    => ['/bin', '/usr/bin', '/usr/sbin'],
 #  }
-
-  user { 'datashield':
-    ensure    => 'present',
-    password  => $password,
-  }
-
 }

@@ -1,34 +1,21 @@
-class opal (
-  $stable         = $opal::params::stable,
-  $password       = $opal::params::password,
-  $mysql_user     = $opal::params::mysql_user,
-  $mysql_password = $opal::params::mysql_password,
-) inherits opal::params {
+class opal inherits opal::params {
 
   include wget
 
 #  class { 'java':
 #    distribution => 'jre',
 #  }
+
+  include ::mongodb::server
+
+  include opal::mysql
+
+  include opal::apt_source
+
+  include opal::server
+
+#  include opal::datashield
 #
-
-  include '::mongodb::server'
-
-  class { 'opal::mysql':
-    mysql_user     => $mysql_user,
-    mysql_password => $mysql_password,
-  }
-
-  class { 'opal::apt_source':
-    stable => $stable,
-  }
-
-  class { 'opal::server':
-    password => $password,
-  }
-
-  include 'opal::datashield'
-
-  include 'opal::data'
+#  include opal::data
 
 }

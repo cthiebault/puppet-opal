@@ -1,8 +1,6 @@
-class opal::apt_source (
-  $stable = true,
-) {
+class opal::apt_source {
 
-  $repo_release = $stable ? {
+  $repo_release = $opal::stable ? {
     true   => 'stable',
     default => 'unstable',
   }
